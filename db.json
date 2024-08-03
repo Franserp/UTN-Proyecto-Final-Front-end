@@ -1,0 +1,29 @@
+{
+    "workspaces": [
+      { "id": 1, "name": "Workspace A" },
+      { "id": 2, "name": "Workspace B" },
+      { "id": 3, "name": "Workspace C" }
+    ],
+    "channels": [
+      { "id": 1, "workspaceId": 1, "name": "general" },
+      { "id": 2, "workspaceId": 1, "name": "consultas" },
+      { "id": 3, "workspaceId": 2, "name": "general" },
+      { "id": 4, "workspaceId": 2, "name": "consultas" },
+      { "id": 5, "workspaceId": 3, "name": "general" },
+      { "id": 6, "workspaceId": 3, "name": "consultas" }
+    ],
+    "messages": [
+      { "id": 1, "channelId": 1, "text": "Welcome to the general channel of Workspace A!", "user": "Alice" },
+      { "id": 2, "channelId": 1, "text": "Hi everyone!", "user": "Bob" },
+      { "id": 3, "channelId": 2, "text": "I have a question about our project.", "user": "Charlie" },
+      { "id": 4, "channelId": 2, "text": "Sure, ask away!", "user": "Alice" },
+      { "id": 5, "channelId": 3, "text": "Welcome to the general channel of Workspace B!", "user": "Dave" },
+      { "id": 6, "channelId": 3, "text": "Hello everyone!", "user": "Eve" },
+      { "id": 7, "channelId": 4, "text": "Can someone help with this issue?", "user": "Frank" },
+      { "id": 8, "channelId": 4, "text": "I'll take a look.", "user": "Dave" },
+      { "id": 9, "channelId": 5, "text": "Welcome to the general channel of Workspace C!", "user": "Grace" },
+      { "id": 10, "channelId": 5, "text": "Good morning!", "user": "Heidi" },
+      { "id": 11, "channelId": 6, "text": "Does anyone have experience with this tool?", "user": "Ivan" },
+      { "id": 12, "channelId": 6, "text": "Yes, I can help.", "user": "Grace" }
+    ]
+  }
