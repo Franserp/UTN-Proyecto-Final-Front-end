@@ -16,7 +16,6 @@ const ListaWorkSpaces = () => {
           <WorkSpaceCard key={workspace.id} workspace={workspace} />
         )}
       </div>
-
     </div>
   )
 }
