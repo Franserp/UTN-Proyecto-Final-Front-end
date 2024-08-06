@@ -8,7 +8,7 @@ const WorkSpaceCard = ({workspace}) => {
     <div>
         <h3>{workspace.name}</h3>
             <p>{workspace.description}</p>
-            <Link to={`/workspace/${workspace.id}/1`}>Entrar</Link>
+            <Link to={`/workspace/${workspace.id}/${workspace.idCanalPred}`}>Entrar</Link>
             <br />
     </div>
   )

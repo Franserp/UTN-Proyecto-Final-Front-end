@@ -36,11 +36,11 @@ export const GlobalContextProvider = ({ children }) => {
         setMessages(data)
     }
 
-    const handleSubmit = async (e, canal_id) => {
+    const handleSubmitMessage = async (e, canal_id) => {
         e.preventDefault()
         const nuevoMensaje = {
             id: '',
-            channelId: {canal_id},
+            channelId: canal_id,
             user: 'yo',
             text: ''
         }
@@ -58,6 +58,7 @@ export const GlobalContextProvider = ({ children }) => {
                 body : JSON.stringify(nuevoMensaje)
             }
         )
+        formulario.reset()
         const result = await response.json()
         setMessages((prevMessages) => [...prevMessages, result])
 
@@ -75,7 +76,7 @@ export const GlobalContextProvider = ({ children }) => {
                 fetchWorkSpaces: fetchWorkSpaces,
                 fetchChannels: fetchChannels,
                 fetchMessages: fetchMessages,
-                handleSubmit : handleSubmit
+                handleSubmitMessage : handleSubmitMessage
             }
 
 

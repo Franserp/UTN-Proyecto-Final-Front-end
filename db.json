@@ -2,15 +2,18 @@
   "workspaces": [
     {
       "id": "1",
-      "name": "Workspace A"
+      "name": "Workspace A",
+      "idCanalPred": 1
     },
     {
       "id": "2",
-      "name": "Workspace B"
+      "name": "Workspace B",
+      "idCanalPred": 3
     },
     {
       "id": "3",
-      "name": "Workspace C"
+      "name": "Workspace C",
+      "idCanalPred": 5
     }
   ],
   "channels": [
@@ -119,12 +122,34 @@
       "user": "Grace"
     },
     {
-      "id": "aa4e7419-bb35-4aa8-af94-ebd1732c3efe",
-      "channelId": {
-        "canal_id": "2"
-      },
+      "id": "ea235c05-856a-47fe-8396-5eb9bbe009b0",
+      "channelId": "1",
       "user": "yo",
-      "text": "dasd"
+      "text": "test"
+    },
+    {
+      "id": "12dffdd5-3556-477d-abe6-86e037a1da42",
+      "channelId": "2",
+      "user": "yo",
+      "text": "test"
+    },
+    {
+      "id": "483f1a94-1d29-47dc-b1a7-9264bb923c3f",
+      "channelId": "2",
+      "user": "yo",
+      "text": "test 2"
+    },
+    {
+      "id": "b1d5929c-e302-485f-b016-9896f6716a34",
+      "channelId": "1",
+      "user": "yo",
+      "text": "test 3"
+    },
+    {
+      "id": "cccefcfb-5af0-4d1f-a682-88c749fa6a9e",
+      "channelId": "1",
+      "user": "yo",
+      "text": "test 4"
     }
   ]
 }

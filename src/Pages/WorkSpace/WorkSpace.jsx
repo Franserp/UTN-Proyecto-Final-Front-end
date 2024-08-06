@@ -6,17 +6,17 @@ import { useGlobalContext } from '../../Context/GlobalContext';
 const WorkSpace = () => {
   const {workspace_id, canal_id} = useParams();
   
-  const { fetchWorkSpace, fetchChannels, fetchMessages, workSpace, channels, messages, handleSubmit } = useGlobalContext();
+  const { fetchWorkSpace, fetchChannels, fetchMessages, workSpace, channels, messages, handleSubmitMessage } = useGlobalContext();
 
   useEffect(() => {
     fetchWorkSpace(workspace_id);
-  }, []);
+  }, [workspace_id]);
 
   useEffect(() => {
     fetchChannels(workspace_id);
-  }, []);
+  }, [workspace_id]);
 
-  useEffect(() => {
+  useEffect(() => { 
     fetchMessages(canal_id);
   }, [canal_id]);
   console.log()
@@ -40,7 +40,7 @@ const WorkSpace = () => {
               <strong>{message.user}</strong>: {message.text}
             </div>
           ))}
-          <form onSubmit={(e) => handleSubmit(e, canal_id)}>
+          <form onSubmit={(e) => handleSubmitMessage(e, canal_id)}>
             <label htmlFor="content"></label>
             <input type="text" name='contenido' id='contenido'/>
             <button type='submit'></button>
