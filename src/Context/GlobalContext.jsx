@@ -5,8 +5,9 @@ const GlobalContext = createContext()
 
 export const GlobalContextProvider = ({ children }) => {
     const [workSpaces, setWorkSpaces] = useState([])
+    const [workSpace, setWorkSpace] = useState(null)
     const [channels, setChannels] = useState([])
-    const [messeges, setMesseges] = useState([])
+    const [messages, setMessages] = useState([])
     const navigate = useNavigate()
 
     const fetchWorkSpaces = async () => {
@@ -15,15 +16,23 @@ export const GlobalContextProvider = ({ children }) => {
         setWorkSpaces(data)
         
     }
-    const fetchChannels = async () => {
-        const response = await fetch('http://localhost:5000/workspaces')
+    
+    const fetchWorkSpace = async (workspaceId) => {
+        const response = await fetch(`http://localhost:5000/workspaces?id=${workspaceId}`)
+        const data = await response.json()
+        setWorkSpace(data)
+        
+    }
+
+    const fetchChannels = async (workspaceId) => {
+        const response = await fetch(`http://localhost:5000/channels?workspaceId=${workspaceId}`)
         const data = await response.json()
         setChannels(data)
     }
-    const fetchMenssages = async () => {
-        const response = await fetch('http://localhost:5000/channels')
+    const fetchMessages = async (channelId) => {
+        const response = await fetch(`http://localhost:5000/messages?channelId=${channelId}`)
         const data = await response.json()
-        setMesseges(data)
+        setMessages(data)
     }
 
 
@@ -32,10 +41,12 @@ export const GlobalContextProvider = ({ children }) => {
             {
                 workSpaces: workSpaces,
                 channels: channels,
-                messeges: messeges,
+                messages: messages,
+                workSpace: workSpace,
+                fetchWorkSpace: fetchWorkSpace,
                 fetchWorkSpaces: fetchWorkSpaces,
                 fetchChannels: fetchChannels,
-                fetchMenssages: fetchMenssages
+                fetchMessages: fetchMessages
             }
 
 
