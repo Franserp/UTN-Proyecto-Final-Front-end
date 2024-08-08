@@ -111,6 +111,13 @@ export const GlobalContextProvider = ({ children }) => {
         navigate(`/workspace/${nuevoWorkSpace.id}/${nuevoWorkSpace.idCanalPred}`)
     }
 
+    const handleNavigateNws = () => {
+        navigate('/workspace/new')
+    }
+
+    const handleNavigateHome = () => {
+        navigate('/')
+    }
 
     return (
         <GlobalContext.Provider value={
@@ -124,7 +131,10 @@ export const GlobalContextProvider = ({ children }) => {
                 fetchChannels: fetchChannels,
                 fetchMessages: fetchMessages,
                 handleSubmitMessage : handleSubmitMessage,
-                handleSubmitNews : handleSubmitNews
+                handleSubmitNews : handleSubmitNews,
+                handleNavigateNws : handleNavigateNws,
+                navigate : navigate,
+                handleNavigateHome : handleNavigateHome
             }
 
 

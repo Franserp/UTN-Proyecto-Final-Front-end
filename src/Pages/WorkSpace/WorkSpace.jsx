@@ -2,11 +2,12 @@
 import React, { useContext, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useGlobalContext } from '../../Context/GlobalContext';
+import '../../styles/styles.css'
 
 const WorkSpace = () => {
-  const {workspace_id, canal_id} = useParams();
-  
-  const { fetchWorkSpace, fetchChannels, fetchMessages, workSpace, channels, messages, handleSubmitMessage } = useGlobalContext();
+  const { workspace_id, canal_id } = useParams();
+
+  const { fetchWorkSpace, fetchChannels, fetchMessages, workSpace, channels, messages, handleSubmitMessage, handleNavigateHome } = useGlobalContext();
 
   useEffect(() => {
     fetchWorkSpace(workspace_id);
@@ -16,42 +17,71 @@ const WorkSpace = () => {
     fetchChannels(workspace_id);
   }, [workspace_id]);
 
-  useEffect(() => { 
+  useEffect(() => {
     fetchMessages(canal_id);
   }, [canal_id]);
-  console.log()
+
   return (
-    <div>
-    {workSpace ? (
-      <>
-        <Link to={'/'}>Volver</Link>
-        <h1>{workSpace[0].name}</h1>
-        <div>
-          {channels.map((channel) => (
-            <div key={channel.id}>
-              <Link to={`/workspace/${workspace_id}/${channel.id}`}>{channel.name}</Link>
+    <>
+      {
+        workSpace ? (
+          <nav className='nav'>
+            <h1>{workSpace[0].name}</h1>
+            <button className='btn' onClick={(e) => handleNavigateHome()}>Salir</button>
+            
+          </nav>
+        )
+          : (
+            <p>Cargando...</p>
+          )
+      }
+
+      <div className='workspace'>
+        {workSpace ? (
+
+          <>
+
+            <div className='sidebar'>
+
+            <h3>Canales</h3>
+
+              <ul>
+                {channels.map((channel) => (
+                  <li key={channel.id}>
+                    <Link to={`/workspace/${workspace_id}/${channel.id}`}>#{channel.name}</Link>
+                  </li>
+                ))}
+              </ul>
+              <button className='create-channel-button'>Crear Nuevo Canal</button>
             </div>
-          ))}
-        </div>
-        <div>
-          <h2>Mensajes del Canal</h2>
-          {messages.map((message) => (
-            <div key={message.id}>
-              <strong>{message.user}</strong>: {message.text}
+            <div className='chat-area'>
+              
+              <div className='messages'>
+                {messages.map((message) => (
+                  <div key={message.id} className='message'>
+                    <strong>{message.user}</strong>: {message.text}
+                  </div>
+                ))}
+              </div>
+              <form onSubmit={(e) => handleSubmitMessage(e, canal_id)} className='message-form'>
+                <label htmlFor="content"></label>
+                <input type="text" name='contenido' id='contenido' placeholder='Escribe tu mensaje' />
+                <button type='submit'>enviar</button>
+              </form>
             </div>
-          ))}
-          <form onSubmit={(e) => handleSubmitMessage(e, canal_id)}>
-            <label htmlFor="content"></label>
-            <input type="text" name='contenido' id='contenido'/>
-            <button type='submit'></button>
-          </form>
-        </div>
-      </>
-    ) : (
-      <p>Cargando...</p>
-    )}
-  </div>
+          </>
+
+
+
+
+
+        ) : (
+          <p>Cargando...</p>
+        )}
+      </div>
+
+    </>
   )
-    
-}    
+
+}
 export default WorkSpace;
