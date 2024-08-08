@@ -14,6 +14,21 @@
       "id": "3",
       "name": "Workspace C",
       "idCanalPred": 5
+    },
+    {
+      "id": "36798d68-a527-414a-a772-fcf0d2a2bfe9",
+      "name": "Test 1",
+      "idCanalPred": "dcbda4de-0391-42cd-a499-8d6740132abc"
+    },
+    {
+      "id": "d0a421c3-5bb1-450c-9338-5d60e65dfa1f",
+      "name": "Test 2",
+      "idCanalPred": "179b66dc-5748-4620-af78-91249db14336"
+    },
+    {
+      "id": "a13529a9-e35e-4ffa-a759-aee25798a4eb",
+      "name": "Test 3",
+      "idCanalPred": "6863d895-eea5-48a2-9005-b2e964f68d98"
     }
   ],
   "channels": [
@@ -46,6 +61,21 @@
       "id": "6",
       "workspaceId": 3,
       "name": "consultas"
+    },
+    {
+      "id": "dcbda4de-0391-42cd-a499-8d6740132abc",
+      "workspaceId": "36798d68-a527-414a-a772-fcf0d2a2bfe9",
+      "name": "Test Canal"
+    },
+    {
+      "id": "179b66dc-5748-4620-af78-91249db14336",
+      "workspaceId": "d0a421c3-5bb1-450c-9338-5d60e65dfa1f",
+      "name": "Test Canal"
+    },
+    {
+      "id": "6863d895-eea5-48a2-9005-b2e964f68d98",
+      "workspaceId": "a13529a9-e35e-4ffa-a759-aee25798a4eb",
+      "name": "Test Canal 3"
     }
   ],
   "messages": [
@@ -150,6 +180,24 @@
       "channelId": "1",
       "user": "yo",
       "text": "test 4"
+    },
+    {
+      "id": "0adf4746-0081-4b5b-90ba-c5c514ce8b61",
+      "channelId": "1",
+      "user": "yo",
+      "text": "test5"
+    },
+    {
+      "id": "4cbc25ac-6e67-4302-81b6-e1319a319df9",
+      "channelId": "5",
+      "user": "yo",
+      "text": "test"
+    },
+    {
+      "id": "69c24f5b-5c23-45be-9899-4139dcecd0e0",
+      "channelId": "dcbda4de-0391-42cd-a499-8d6740132abc",
+      "user": "yo",
+      "text": "hola"
     }
   ]
 }

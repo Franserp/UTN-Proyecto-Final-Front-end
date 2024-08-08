@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import WorkSpaceCard from '../WorkSpaceCard/WorkSpaceCard';
 import { useGlobalContext } from '../../Context/GlobalContext';
+import '../../styles/styles.css'
 
 const ListaWorkSpaces = () => {
   const { workSpaces, fetchWorkSpaces } = useGlobalContext()
@@ -9,9 +10,9 @@ const ListaWorkSpaces = () => {
   }, [])
 
   return (
-    <div>
+    <div >
       <h1>WorkSpaces list</h1>
-      <div>
+      <div className='contenedor_cartas'>
         {workSpaces.map(workspace =>
           <WorkSpaceCard key={workspace.id} workspace={workspace} />
         )}

@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+
+:root {
+    --primary-color: #04229b ;
+    --secondary-color: hsl(226, 79%, 63%);
+    --background-color: #141414;
+    --text-color: #c6cacf;
+}
+
+.btn {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: var(--secondary-color);
+}
+
+h1, h2, h3 {
+    color: var(--text-color); 
+}
+.form-container {
+    display: flex;
+    width: 650px;
+    height: 300px;
+    flex-direction: column; /* Apila los elementos verticalmente */
+    max-width: 700px; /* Ancho máximo del formulario */
+    margin: auto; /* Centra el formulario horizontalmente */
+    padding: 50px;
+    background-color:var(--background-color);
+    border: 5px solid var(--primary-color);
+    border-radius: 5%;
+    font-family: 'Roboto', sans-serif, ;
+    color: var(--text-color);
+
+    
+}
+
+.input-group {
+    margin-bottom: 20px;
+    display: flex; /* Espacio entre grupos de inputs */
+    flex-direction: column  ;
+    font-family: 'Roboto', sans-serif
+     
+}
+.input-group input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none; /* Eliminar el contorno predeterminado */
+    transition: border-color 0.3s;
+}
+
+/* Estilos para el hover y el foco de los inputs */
+.input-group input:focus {
+    border-color: #3498db; /* Cambiar el color del borde al enfocar */
+}
+
+.label {
+    margin-bottom: 5px; /* Espacio entre etiqueta y input */
+    font-family: 'Roboto', sans-serif
+}
+
+.button-group {
+    
+    margin-top: 110px; /* Espacio entre inputs y botones */
+    display: flex;
+    justify-content: space-between; /* Distribuye los botones */
+    font-family: 'Roboto', sans-serif;
+ 
+}
+
+
+.contenedor {
+    height: 100vh;
+    background-color: var(--background-color);
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+}
+
+.contenedor_cartas {
+    border: 5px, solid;
+    border-color: #04229b;
+    border-radius: 5%;
+    padding: 10px;
+    width: 700px;
+    
+}
+
+.contenedor_workspace {
+    border: 5px, solid;
+    border-color: #04229b;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    width: 95%;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 5px;
+}
+
+.form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}

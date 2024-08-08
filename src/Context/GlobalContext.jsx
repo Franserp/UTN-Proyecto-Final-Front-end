@@ -64,6 +64,53 @@ export const GlobalContextProvider = ({ children }) => {
 
     }
 
+    const handleSubmitNews = async (e) => {
+        e.preventDefault()
+        const formulario = e.target
+        const datosFormularios = new FormData(formulario)
+        const nuevoWorkSpace = {
+            id: uuidv4(),
+            name: datosFormularios.get('nombreNuevoWs'),
+            idCanalPred: uuidv4()
+
+        }
+        const responseWorkspace = await fetch('http://localhost:5000/workspaces',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(nuevoWorkSpace)
+            }
+        )
+
+        const resultWs = await responseWorkspace.json()
+        setWorkSpaces((prevWorkSpaces) => [...prevWorkSpaces, resultWs])
+
+        
+
+        const nuevoCanal = {
+            id: nuevoWorkSpace.idCanalPred,
+            workspaceId: nuevoWorkSpace.id,
+            name: datosFormularios.get('nombreCanal')
+        }
+
+        const responseChannel = await fetch('http://localhost:5000/channels',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(nuevoCanal)
+            }
+        )
+
+        const resultCanal = await responseChannel.json()
+        setChannels((prevChannels) => [...prevChannels, resultCanal])
+
+        navigate(`/workspace/${nuevoWorkSpace.id}/${nuevoWorkSpace.idCanalPred}`)
+    }
+
 
     return (
         <GlobalContext.Provider value={
@@ -76,7 +123,8 @@ export const GlobalContextProvider = ({ children }) => {
                 fetchWorkSpaces: fetchWorkSpaces,
                 fetchChannels: fetchChannels,
                 fetchMessages: fetchMessages,
-                handleSubmitMessage : handleSubmitMessage
+                handleSubmitMessage : handleSubmitMessage,
+                handleSubmitNews : handleSubmitNews
             }
 
 
