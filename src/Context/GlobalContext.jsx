@@ -8,6 +8,7 @@ export const GlobalContextProvider = ({ children }) => {
     const [workSpace, setWorkSpace] = useState(null)
     const [channels, setChannels] = useState([])
     const [messages, setMessages] = useState([])
+    
 
     const navigate = useNavigate()
 
