@@ -8,7 +8,8 @@ export const GlobalContextProvider = ({ children }) => {
     const [workSpace, setWorkSpace] = useState(null)
     const [channels, setChannels] = useState([])
     const [messages, setMessages] = useState([])
-    
+    const [isMenuOpen, setIsMenuOpen] = useState(false)
+
 
     const navigate = useNavigate()
 
@@ -47,16 +48,16 @@ export const GlobalContextProvider = ({ children }) => {
         }
         const formulario = e.target
         const datosFormularios = new FormData(formulario)
-        nuevoMensaje['text'] = datosFormularios.get('contenido')    
+        nuevoMensaje['text'] = datosFormularios.get('contenido')
         nuevoMensaje['id'] = uuidv4()
-        
+
         const response = await fetch('http://localhost:5000/messages',
             {
                 method: 'POST',
-                headers : {
+                headers: {
                     'Content-Type': 'application/json',
                 },
-                body : JSON.stringify(nuevoMensaje)
+                body: JSON.stringify(nuevoMensaje)
             }
         )
         formulario.reset()
@@ -88,7 +89,7 @@ export const GlobalContextProvider = ({ children }) => {
         const resultWs = await responseWorkspace.json()
         setWorkSpaces((prevWorkSpaces) => [...prevWorkSpaces, resultWs])
 
-        
+
 
         const nuevoCanal = {
             id: nuevoWorkSpace.idCanalPred,
@@ -111,6 +112,30 @@ export const GlobalContextProvider = ({ children }) => {
 
         navigate(`/workspace/${nuevoWorkSpace.id}/${nuevoWorkSpace.idCanalPred}`)
     }
+    const handleSubmitNewChannel = async (e, workspaceId) => {
+        e.preventDefault()
+        const formulario = e.target
+        const datosFormulario = new FormData(formulario)
+        const nuevoCanal = {
+            id: uuidv4(),
+            workspaceId: workspaceId,
+            name: datosFormulario.get('nombreCanal')
+        }
+        const responseChannel = await fetch('http://localhost:5000/channels',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(nuevoCanal)
+            }
+        )
+
+        const resultCanal = await responseChannel.json()
+        setChannels((prevChannels) => [...prevChannels, resultCanal])
+        setIsMenuOpen(prevState => !prevState)
+        navigate(`/workspace/${workspaceId}/${nuevoCanal.id}`)
+    }
 
     const handleNavigateNws = () => {
         navigate('/workspace/new')
@@ -118,6 +143,10 @@ export const GlobalContextProvider = ({ children }) => {
 
     const handleNavigateHome = () => {
         navigate('/')
+    }
+
+    const toggleMenu = () => {
+        setIsMenuOpen(prevState => !prevState);
     }
 
     return (
@@ -131,11 +160,17 @@ export const GlobalContextProvider = ({ children }) => {
                 fetchWorkSpaces: fetchWorkSpaces,
                 fetchChannels: fetchChannels,
                 fetchMessages: fetchMessages,
-                handleSubmitMessage : handleSubmitMessage,
-                handleSubmitNews : handleSubmitNews,
-                handleNavigateNws : handleNavigateNws,
-                navigate : navigate,
-                handleNavigateHome : handleNavigateHome
+                handleSubmitMessage: handleSubmitMessage,
+                handleSubmitNews: handleSubmitNews,
+                handleNavigateNws: handleNavigateNws,
+                navigate: navigate,
+                handleNavigateHome: handleNavigateHome,
+                handleSubmitNewChannel: handleSubmitNewChannel,
+                isMenuOpen : isMenuOpen,
+                toggleMenu : toggleMenu
+                
+
+
             }
 
 

@@ -1,0 +1,95 @@
+
+
+.sidebar {
+   
+    width: 250px;
+    background-color: #333;
+    height: 100vh;
+    z-index: 1000;
+    
+    
+  }
+  
+  .menu-toggle {
+    display: none;
+    margin-right: 4px;
+    top: 10px;
+    left: 10px;
+    background-color: #444;
+    border: none;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 18px;
+  }
+  
+  .menu {
+    padding: 20px;
+  }
+  
+  .menu ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .menu ul li {
+    margin: 10px 0;
+  }
+  
+  .menu ul li a {
+    color: white;
+    text-decoration: none;
+  }
+  .nav-buttons {
+    display: flex;
+    gap: 10px; /* Espacio entre los botones */
+  }
+  
+  /* Estilos para dispositivos móviles */
+  @media (max-width: 768px) {
+
+
+    .sidebar {
+        position: absolute;
+        top: 69px;
+        left: -100%; /* Ancho del menú */
+        width: 300px;
+        height: 100%;
+        background-color: #333;
+        transition: left 0.3s ease;
+    }
+    .chat-area {
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+        
+    }
+    .message-form {
+        margin-bottom: 25px;
+    }
+  
+    .menu {
+      display: none;
+      ;
+    }
+  
+    .menu.visible {
+      display: block;
+      left: 0;
+      
+    }
+  
+    .menu-toggle {
+      display: block;
+      box-sizing: border-box;
+      margin: 15px;
+    }
+  
+    .sidebar.open .menu {
+      display: block;
+    }
+  }
+  .sidebar.open {
+    display: block;
+    left: 0
+  }

@@ -76,6 +76,11 @@
       "id": "6863d895-eea5-48a2-9005-b2e964f68d98",
       "workspaceId": "a13529a9-e35e-4ffa-a759-aee25798a4eb",
       "name": "Test Canal 3"
+    },
+    {
+      "id": "8b722cc3-d785-4f91-a815-cc34023aa88c",
+      "workspaceId": "1",
+      "name": "Test Canal"
     }
   ],
   "messages": [

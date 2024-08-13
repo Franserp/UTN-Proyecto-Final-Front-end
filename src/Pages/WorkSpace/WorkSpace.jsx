@@ -1,8 +1,10 @@
 
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useGlobalContext } from '../../Context/GlobalContext';
 import '../../styles/styles.css'
+import './styloSidebar.css'
+import CreateNewChannel from '../../Components/CreateNewChannel/CreateNewChannel';
 
 const WorkSpace = () => {
   const { workspace_id, canal_id } = useParams();
@@ -20,14 +22,26 @@ const WorkSpace = () => {
   useEffect(() => {
     fetchMessages(canal_id);
   }, [canal_id]);
+  const [isOpen, setIsOpen] = useState(false);
 
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
   return (
     <>
       {
         workSpace ? (
           <nav className='nav'>
             <h1>{workSpace[0].name}</h1>
-            <button className='btn' onClick={(e) => handleNavigateHome()}>Salir</button>
+           
+           <div className="nav-buttons">
+           <button className="menu-toggle" onClick={toggleMenu}>
+                ☰
+              </button>
+            <button className='btn btn-salir' onClick={(e) => handleNavigateHome()}>Salir</button>
+
+
+           </div>
             
           </nav>
         )
@@ -40,22 +54,22 @@ const WorkSpace = () => {
         {workSpace ? (
 
           <>
-
-            <div className='sidebar'>
-
-            <h3>Canales</h3>
-
-              <ul>
+            <div className={`sidebar ${isOpen ? 'open' : ''}`}>
+              <h4>Canales</h4>
+              <nav className={`menu ${isOpen ? 'visible' : ''}`}>
+                <ul>
                 {channels.map((channel) => (
                   <li key={channel.id}>
                     <Link to={`/workspace/${workspace_id}/${channel.id}`}>#{channel.name}</Link>
                   </li>
                 ))}
-              </ul>
-              <button className='create-channel-button'>Crear Nuevo Canal</button>
+                </ul>
+                <CreateNewChannel/>
+              </nav>
             </div>
+
             <div className='chat-area'>
-              
+
               <div className='messages'>
                 {messages.map((message) => (
                   <div key={message.id} className='message'>
