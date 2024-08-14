@@ -13,7 +13,7 @@ const Home = () => {
         <ListaWorkSpaces />
       </div>
       <div >
-        <button className='btn' onClick={handleNavigateNws}>Crear Nuevo WorkSpace</button>
+        <button className='btn btn-crear-ws' onClick={handleNavigateNws}>Crear Nuevo WorkSpace</button>
       </div>
     </div>
 

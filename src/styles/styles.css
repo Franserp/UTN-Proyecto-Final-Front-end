@@ -33,7 +33,7 @@ ul {
   }
   
   li a:hover {
-    background-color: #f0f0f0; /* Cambiar color de fondo al pasar el mouse */
+    background-color: var(--terciar-color); /* Cambiar color de fondo al pasar el mouse */
   }
   
 
@@ -299,4 +299,48 @@ body {
 .btn-salir {
     box-sizing: border-box;
     margin: 15px 5px;
+}
+
+@media (max-width: 768px) {
+    body {
+        font-size: 16px;
+    }
+
+.contenedor {
+    height: 100vh;  
+    overflow: scroll;
+}
+
+    .btn-crear-ws {
+        margin-top: 60px;
+        margin-bottom: 50px;
+        height: 45px;
+        font-size: 16px;
+      
+    }
+
+    .boton-derecha{
+        width: 60px;
+        box-sizing: border-box;
+        margin-right: 5px;
+        text-align: center;
+        font-size: 16px;
+        padding: 0;
+        
+    }
+
+    .contenedor_cartas{
+        min-width: 250px;
+        box-sizing: border-box;
+        padding: 15px;
+        width: 140%;
+        border: none;
+        margin-left: -20%
+
+    }
+    .contenedor_workspace{
+        box-sizing: border-box;
+        margin: 5px;
+        margin-top: 20px;
+    }
 }

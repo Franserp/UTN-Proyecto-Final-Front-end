@@ -1,0 +1,27 @@
+@media (max-width: 768px) {
+        .form-container {
+            min-width: 250px;
+            box-sizing: border-box;
+            padding: 15px;
+            width: 100%;
+            border: none;
+            display: flex;
+            align-items: center;
+
+            
+        }
+    
+       
+       .input-group {
+        width: 90%;
+       }
+       .btn-submit{
+        margin-right: 30px;
+       
+       }
+       .btn-cancelar{
+        margin-left: 30px;
+        margin-right: 10px;
+       }
+
+}
