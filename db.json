@@ -29,12 +29,8 @@
       "id": "a13529a9-e35e-4ffa-a759-aee25798a4eb",
       "name": "Test 3",
       "idCanalPred": "6863d895-eea5-48a2-9005-b2e964f68d98"
-    },
-    {
-      "id": "95aa81c3-b5c7-451a-a45d-f17140fc4905",
-      "name": "",
-      "idCanalPred": "8dfae87b-7b52-471c-933a-ccf037c6422a"
     }
+    
   ],
   "channels": [
     {
@@ -86,12 +82,8 @@
       "id": "8b722cc3-d785-4f91-a815-cc34023aa88c",
       "workspaceId": "1",
       "name": "Test Canal"
-    },
-    {
-      "id": "8dfae87b-7b52-471c-933a-ccf037c6422a",
-      "workspaceId": "95aa81c3-b5c7-451a-a45d-f17140fc4905",
-      "name": ""
     }
+    
   ],
   "messages": [
     {
