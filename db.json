@@ -30,7 +30,6 @@
       "name": "Test 3",
       "idCanalPred": "6863d895-eea5-48a2-9005-b2e964f68d98"
     }
-    
   ],
   "channels": [
     {
@@ -83,7 +82,6 @@
       "workspaceId": "1",
       "name": "Test Canal"
     }
-    
   ],
   "messages": [
     {
@@ -268,6 +266,18 @@
     },
     {
       "id": "9502a40c-6b20-4724-bf67-d9e4a212c77f",
+      "channelId": "1",
+      "user": "yo",
+      "text": "test"
+    },
+    {
+      "id": "7e1f58b9-e95b-4970-a78b-bb0e513ea71c",
+      "channelId": "8b722cc3-d785-4f91-a815-cc34023aa88c",
+      "user": "yo",
+      "text": "hola"
+    },
+    {
+      "id": "4869a8ff-1311-4f8b-9286-5189f4fef14f",
       "channelId": "1",
       "user": "yo",
       "text": "test"

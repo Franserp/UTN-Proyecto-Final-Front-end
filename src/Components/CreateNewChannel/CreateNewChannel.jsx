@@ -3,6 +3,15 @@ import { useGlobalContext } from '../../Context/GlobalContext'
 import '../../Components/CreateNewChannel/styloFormNewChannel.css'
 import { useParams } from 'react-router-dom'
 
+/**
+ * Renders a component that allows the user to create a new channel. 
+ * 
+ * The component consists of a button that, when clicked, toggles the visibility of a form. 
+ * The form allows the user to enter a name for the new channel and submit it to the server using the handleSubmitNewChannel function. 
+ * The component also receives the workspace_id from the URL and passes it to the handleSubmitNewChannel function.
+ * 
+ * @return {JSX.Element} The rendered component.
+ */
 const CreateNewChannel = () => {
     const { handleSubmitNewChannel, isMenuOpen, toggleMenu } = useGlobalContext()
     const { workspace_id } = useParams()

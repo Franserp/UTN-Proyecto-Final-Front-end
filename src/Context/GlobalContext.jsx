@@ -9,35 +9,65 @@ export const GlobalContextProvider = ({ children }) => {
     const [channels, setChannels] = useState([])
     const [messages, setMessages] = useState([])
     const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(false)
 
 
     const navigate = useNavigate()
 
+    /**
+     * Fetches all workspaces from the server and updates the state.
+     */
     const fetchWorkSpaces = async () => {
-        const response = await fetch('http://localhost:5000/workspaces')
+        const response = await fetch('https://api.jsonbin.io/v3/b/66c3ce96e41b4d34e4229509')
         const data = await response.json()
-        setWorkSpaces(data)
+        setWorkSpaces(data.record.workspaces)
 
     }
 
+    /**
+     * Fetches a single workspace from the server by its ID and updates the state.
+     * @param {string} workspaceId - The ID of the workspace to fetch.
+     */
     const fetchWorkSpace = async (workspaceId) => {
-        const response = await fetch(`http://localhost:5000/workspaces?id=${workspaceId}`)
+        const response = await fetch(`https://api.jsonbin.io/v3/b/66c3ce96e41b4d34e4229509`)
         const data = await response.json()
-        setWorkSpace(data)
+        const workspace = await data.record.workspaces.find(workspace => workspace.id === workspaceId)
+        console.log(workspace)
+        setWorkSpace(workspace)
 
     }
 
+    /**
+     * Fetches all channels from the server by the given workspaceId and updates the state.
+     * @param {string} workspaceId - The ID of the workspace to fetch channels from.
+     */
     const fetchChannels = async (workspaceId) => {
-        const response = await fetch(`http://localhost:5000/channels?workspaceId=${workspaceId}`)
+        const response = await fetch(`https://api.jsonbin.io/v3/b/66c3ce96e41b4d34e4229509`)
         const data = await response.json()
-        setChannels(data)
+        const channels = await data.record.channels.filter(channel => String(channel.workspaceId) === String(workspaceId))
+        console.log(channels)
+        setChannels(channels)
     }
+    /**
+     * Fetches all messages from the server by the given channelId and updates the state.
+     *
+     * @param {string} channelId - The ID of the channel to fetch messages from.
+     * @return {Promise<void>} - A Promise that resolves when the messages are fetched and the state is updated.
+     */
     const fetchMessages = async (channelId) => {
-        const response = await fetch(`http://localhost:5000/messages?channelId=${channelId}`)
+        const response = await fetch(`https://api.jsonbin.io/v3/b/66c3ce96e41b4d34e4229509`)
         const data = await response.json()
-        setMessages(data)
+        const messages = await data.record.messages.filter(message => String(message.channelId) === String(channelId))
+        setMessages(messages)
     }
 
+    /**
+     * Handles form submission for sending a new message.
+     *
+     * @param {Event} e - The form submission event.
+     * @param {string} canal_id - The ID of the channel to send the message to.
+     * @return {Promise<void>} - A Promise that resolves when the message is successfully sent and the messages state is updated.
+     */
     const handleSubmitMessage = async (e, canal_id) => {
         e.preventDefault()
         const nuevoMensaje = {
@@ -51,21 +81,34 @@ export const GlobalContextProvider = ({ children }) => {
         nuevoMensaje['text'] = datosFormularios.get('contenido')
         nuevoMensaje['id'] = uuidv4()
 
-        const response = await fetch('http://localhost:5000/messages',
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(nuevoMensaje)
-            }
-        )
+        const response = await fetch('https://api.jsonbin.io/v3/b/66c3ce96e41b4d34e4229509')
+        const data = await response.json()
+        const updatedMessages = [...data.record.messages, nuevoMensaje]
+        const newResponse = await fetch(`https://api.jsonbin.io/v3/b/66c3ce96e41b4d34e4229509`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ record: { messages: updatedMessages } })
+        })
+
+        const responseData = await newResponse.json();
+        console.log(responseData)
+
         formulario.reset()
-        const result = await response.json()
-        setMessages((prevMessages) => [...prevMessages, result])
+        setMessages(updatedMessages.filter(message => String(message.channelId) === String(canal_id)))
 
     }
 
+    /**
+     * Handles form submission for creating a new workspace.
+     * Sends a POST request to the server to create the workspace and channel.
+     * Updates the workspaces and channels states.
+     * Navigates to the newly created workspace.
+     *
+     * @param {Event} e - The form submission event.
+     * @return {Promise<void>} - A Promise that resolves when the workspace and channel are successfully created and the states are updated.
+     */
     const handleSubmitNews = async (e) => {
         e.preventDefault()
         const formulario = e.target
@@ -76,42 +119,40 @@ export const GlobalContextProvider = ({ children }) => {
             idCanalPred: uuidv4()
 
         }
-        const responseWorkspace = await fetch('http://localhost:5000/workspaces',
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(nuevoWorkSpace)
-            }
-        )
-
-        const resultWs = await responseWorkspace.json()
-        setWorkSpaces((prevWorkSpaces) => [...prevWorkSpaces, resultWs])
-
-
-
         const nuevoCanal = {
             id: nuevoWorkSpace.idCanalPred,
             workspaceId: nuevoWorkSpace.id,
             name: datosFormularios.get('nombreCanal')
         }
 
-        const responseChannel = await fetch('http://localhost:5000/channels',
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(nuevoCanal)
-            }
-        )
+        const response = await fetch('https://api.jsonbin.io/v3/b/66c3ce96e41b4d34e4229509')
+        const data = await response.json()
+        const updatedWorkspaces = [...data.record.workspaces, nuevoWorkSpace]
+        const updatedChannels = [...data.record.channels, nuevoCanal]
 
-        const resultCanal = await responseChannel.json()
-        setChannels((prevChannels) => [...prevChannels, resultCanal])
+        await fetch(`https://api.jsonbin.io/v3/b/66c3ce96e41b4d34e4229509`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ record: { workspaces: updatedWorkspaces, channels: updatedChannels } })
+        })
 
-        navigate(`/workspace/${nuevoWorkSpace.id}/${nuevoWorkSpace.idCanalPred}`)
+        formulario.reset()
+        setWorkSpaces(updatedWorkspaces)
+        setChannels(updatedChannels)
+        navigate(`/`)
     }
+    /**
+     * Handles form submission for creating a new channel.
+     * Sends a POST request to the server to create the channel.
+     * Updates the channels state.
+     * Navigates to the newly created channel.
+     *
+     * @param {Event} e - The form submission event.
+     * @param {string} workspaceId - The ID of the workspace to create the channel in.
+     * @return {Promise<void>} - A Promise that resolves when the channel is successfully created and the states are updated.
+     */
     const handleSubmitNewChannel = async (e, workspaceId) => {
         e.preventDefault()
         const formulario = e.target
@@ -137,16 +178,42 @@ export const GlobalContextProvider = ({ children }) => {
         navigate(`/workspace/${workspaceId}/${nuevoCanal.id}`)
     }
 
+    /**
+     * Navigates to the page for creating a new workspace.
+     *
+     * @return {void} This function does not return anything.
+     */
     const handleNavigateNws = () => {
         navigate('/workspace/new')
     }
 
+    /**
+     * Navigates the user to the home page.
+     *
+     * This function does not take any parameters and does not return anything.
+     */
     const handleNavigateHome = () => {
         navigate('/')
     }
 
+
+    /**
+     * Toggles the state of the sidebar menu to open or close.
+     *
+     * This function does not take any parameters and does not return anything.
+     */
     const toggleMenu = () => {
         setIsMenuOpen(prevState => !prevState);
+    }
+
+
+    /**
+     * Toggles the state of the menu to open or close.
+     *
+     * This function does not take any parameters and does not return anything.
+     */
+    const toggleMenuT = () => {
+        setIsOpen(!isOpen);
     }
 
     return (
@@ -166,9 +233,11 @@ export const GlobalContextProvider = ({ children }) => {
                 navigate: navigate,
                 handleNavigateHome: handleNavigateHome,
                 handleSubmitNewChannel: handleSubmitNewChannel,
-                isMenuOpen : isMenuOpen,
-                toggleMenu : toggleMenu
-                
+                isMenuOpen: isMenuOpen,
+                toggleMenu: toggleMenu,
+                toggleMenuT: toggleMenuT,
+                setIsOpen: setIsOpen,
+                isOpen: isOpen
 
 
             }
@@ -181,6 +250,11 @@ export const GlobalContextProvider = ({ children }) => {
     )
 }
 
+/**
+ * Retrieves the global context object from the Context API.
+ *
+ * @return {object} The global context object.
+ */
 export const useGlobalContext = () => {
     return useContext(GlobalContext)
 }
