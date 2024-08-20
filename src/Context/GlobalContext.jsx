@@ -162,13 +162,18 @@ export const GlobalContextProvider = ({ children }) => {
             workspaceId: workspaceId,
             name: datosFormulario.get('nombreCanal')
         }
-        const responseChannel = await fetch('http://localhost:5000/channels',
+
+        const response = await fetch('https://api.jsonbin.io/v3/b/66c3ce96e41b4d34e4229509')
+        const data = await response.json()
+
+        const updatedChannels = [...data.record.channels, nuevoCanal]
+        const responseChannel = await fetch('https://api.jsonbin.io/v3/b/66c3ce96e41b4d34e4229509',
             {
-                method: 'POST',
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(nuevoCanal)
+                body: JSON.stringify(updatedChannels)
             }
         )
 
