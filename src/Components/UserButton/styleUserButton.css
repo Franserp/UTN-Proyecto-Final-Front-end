@@ -1,0 +1,43 @@
+.user-container {
+    position: relative; /* Necesario para que el menú se posicione respecto al contenedor */
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 16px; /* Separación del borde derecho */
+}
+
+.user-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.user-button:hover {
+    background-color: #0056b3;
+}
+
+.user-menu {
+    position: absolute;
+    top: 40px; /* Ajusta según la altura del botón */
+    right: 0;
+    background-color: #16359b;
+    border: 1px solid #ddd;
+    
+    border-radius: 4px;
+    padding: 8px 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;  
+    width: 200px;
+    height: 200px;
+}
+
+.user-menu p {
+    margin: 20px;
+    font-size: 14px;
+    color: #c6cacf;
+}

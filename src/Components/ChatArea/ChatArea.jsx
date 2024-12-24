@@ -1,4 +1,5 @@
 
+import { useContext } from 'react';
 import MessageForm from '../MessageForm/MessageForm';
 import Messages from '../Messages/Messages';
 
@@ -11,6 +12,7 @@ import Messages from '../Messages/Messages';
  * @return {JSX.Element} The chat area component.
  */
 const ChatArea = ({ canal_id }) => {
+ 
   return (
     <div className='chat-area'>
       <Messages  />

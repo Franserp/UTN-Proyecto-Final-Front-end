@@ -10,7 +10,8 @@ import { Link } from 'react-router-dom'
  * @returns {ReactElement} - A JSX element representing the side bar.
  */
 const SideBar = ({workspace_id}) => {
-    const {channels, isOpen} = useGlobalContext()
+    const {channels, isOpen,} = useGlobalContext()
+    
   return (
     <>
      <div className={`sidebar ${isOpen ? 'open' : ''}`}>

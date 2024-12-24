@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react'
 import WorkSpaceCard from '../WorkSpaceCard/WorkSpaceCard';
 import { useGlobalContext } from '../../Context/GlobalContext';
+
 import '../../styles/styles.css'
+import UserButton from '../UserButton/UserButton';
 
 
 /**
@@ -17,7 +19,10 @@ const ListaWorkSpaces = () => {
 
   return (
     <div >
+      <div>
+      <UserButton />
       <h1>WorkSpaces list</h1>
+      </div>
       <div className='contenedor_cartas'>
         {workSpaces.map(workspace =>
           <WorkSpaceCard key={workspace.id} workspace={workspace} />

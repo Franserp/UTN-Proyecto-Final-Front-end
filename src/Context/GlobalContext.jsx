@@ -4,219 +4,423 @@ import { v4 as uuidv4 } from 'uuid'
 const GlobalContext = createContext()
 
 export const GlobalContextProvider = ({ children }) => {
+    const [user, setUser] = useState(null)
     const [workSpaces, setWorkSpaces] = useState([])
     const [workSpace, setWorkSpace] = useState(null)
     const [channels, setChannels] = useState([])
     const [messages, setMessages] = useState([])
     const [isMenuOpen, setIsMenuOpen] = useState(false)
     const [isOpen, setIsOpen] = useState(false)
+    const [isUserInfoVisible, setIsUserInfoVisible] = useState(false);
 
 
     const navigate = useNavigate()
 
-    /**
-     * Fetches all workspaces from the server and updates the state.
-     */
+   
     const fetchWorkSpaces = async () => {
-        const response = await fetch('https://api.jsonbin.io/v3/b/66c3ce96e41b4d34e4229509')
-        const data = await response.json()
-        setWorkSpaces(data.record.workspaces)
+        const response = await fetch('https://back-end-proyecto-final-production.up.railway.app/api/workspaces', {
+            method: 'GET', 
+            headers: {
+                'Content-Type': 'application/json', 
+            },
+            credentials: 'include', 
+        })
+            .then((response) => {
+              
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status} ${response.statusText}`);
+                }
+                return response.json(); 
+            })
+            .then((data) => {
+                console.log('Datos recibidos:', data); 
+             
+                setWorkSpaces(data); 
+            })
+            .catch((error) => {
+                console.error('Error en el fetch:', error.message); 
+           
+                setWorkSpaces([]); 
+            });
 
     }
 
-    /**
-     * Fetches a single workspace from the server by its ID and updates the state.
-     * @param {string} workspaceId - The ID of the workspace to fetch.
-     */
+   
     const fetchWorkSpace = async (workspaceId) => {
-        const response = await fetch(`https://api.jsonbin.io/v3/b/66c3ce96e41b4d34e4229509`)
-        const data = await response.json()
-        const workspace = await data.record.workspaces.find(workspace => workspace.id === workspaceId)
-        console.log(workspace)
-        setWorkSpace(workspace)
-
-    }
-
-    /**
-     * Fetches all channels from the server by the given workspaceId and updates the state.
-     * @param {string} workspaceId - The ID of the workspace to fetch channels from.
-     */
-    const fetchChannels = async (workspaceId) => {
-        const response = await fetch(`https://api.jsonbin.io/v3/b/66c3ce96e41b4d34e4229509`)
-        const data = await response.json()
-        const channels = await data.record.channels.filter(channel => String(channel.workspaceId) === String(workspaceId))
-        console.log(channels)
-        setChannels(channels)
-    }
-    /**
-     * Fetches all messages from the server by the given channelId and updates the state.
-     *
-     * @param {string} channelId - The ID of the channel to fetch messages from.
-     * @return {Promise<void>} - A Promise that resolves when the messages are fetched and the state is updated.
-     */
-    const fetchMessages = async (channelId) => {
-        const response = await fetch(`https://api.jsonbin.io/v3/b/66c3ce96e41b4d34e4229509`)
-        const data = await response.json()
-        const messages = await data.record.messages.filter(message => String(message.channelId) === String(channelId))
-        setMessages(messages)
-    }
-
-    /**
-     * Handles form submission for sending a new message.
-     *
-     * @param {Event} e - The form submission event.
-     * @param {string} canal_id - The ID of the channel to send the message to.
-     * @return {Promise<void>} - A Promise that resolves when the message is successfully sent and the messages state is updated.
-     */
-    const handleSubmitMessage = async (e, canal_id) => {
-        e.preventDefault()
-        const nuevoMensaje = {
-            id: '',
-            channelId: canal_id,
-            user: 'yo',
-            text: ''
-        }
-        const formulario = e.target
-        const datosFormularios = new FormData(formulario)
-        nuevoMensaje['text'] = datosFormularios.get('contenido')
-        nuevoMensaje['id'] = uuidv4()
-
-        const response = await fetch('https://api.jsonbin.io/v3/b/66c3ce96e41b4d34e4229509')
-        const data = await response.json()
-        const updatedMessages = [...data.record.messages, nuevoMensaje]
-        const newResponse = await fetch(`https://api.jsonbin.io/v3/b/66c3ce96e41b4d34e4229509`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ record: { messages: updatedMessages } })
-        })
-
-        const responseData = await newResponse.json();
-        console.log(responseData)
-
-        formulario.reset()
-        setMessages(updatedMessages.filter(message => String(message.channelId) === String(canal_id)))
-
-    }
-
-    /**
-     * Handles form submission for creating a new workspace.
-     * Sends a POST request to the server to create the workspace and channel.
-     * Updates the workspaces and channels states.
-     * Navigates to the newly created workspace.
-     *
-     * @param {Event} e - The form submission event.
-     * @return {Promise<void>} - A Promise that resolves when the workspace and channel are successfully created and the states are updated.
-     */
-    const handleSubmitNews = async (e) => {
-        e.preventDefault()
-        const formulario = e.target
-        const datosFormularios = new FormData(formulario)
-        const nuevoWorkSpace = {
-            id: uuidv4(),
-            name: datosFormularios.get('nombreNuevoWs'),
-            idCanalPred: uuidv4()
-
-        }
-        const nuevoCanal = {
-            id: nuevoWorkSpace.idCanalPred,
-            workspaceId: nuevoWorkSpace.id,
-            name: datosFormularios.get('nombreCanal')
-        }
-
-        const response = await fetch('https://api.jsonbin.io/v3/b/66c3ce96e41b4d34e4229509')
-        const data = await response.json()
-        const updatedWorkspaces = [...data.record.workspaces, nuevoWorkSpace]
-        const updatedChannels = [...data.record.channels, nuevoCanal]
-
-        await fetch(`https://api.jsonbin.io/v3/b/66c3ce96e41b4d34e4229509`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ record: { workspaces: updatedWorkspaces, channels: updatedChannels } })
-        })
-
-        formulario.reset()
-        setWorkSpaces(updatedWorkspaces)
-        setChannels(updatedChannels)
-        navigate(`/`)
-    }
-    /**
-     * Handles form submission for creating a new channel.
-     * Sends a POST request to the server to create the channel.
-     * Updates the channels state.
-     * Navigates to the newly created channel.
-     *
-     * @param {Event} e - The form submission event.
-     * @param {string} workspaceId - The ID of the workspace to create the channel in.
-     * @return {Promise<void>} - A Promise that resolves when the channel is successfully created and the states are updated.
-     */
-    const handleSubmitNewChannel = async (e, workspaceId) => {
-        e.preventDefault()
-        const formulario = e.target
-        const datosFormulario = new FormData(formulario)
-        const nuevoCanal = {
-            id: uuidv4(),
-            workspaceId: workspaceId,
-            name: datosFormulario.get('nombreCanal')
-        }
-
-        const response = await fetch('https://api.jsonbin.io/v3/b/66c3ce96e41b4d34e4229509')
-        const data = await response.json()
-
-        const updatedChannels = [...data.record.channels, nuevoCanal]
-        const responseChannel = await fetch('https://api.jsonbin.io/v3/b/66c3ce96e41b4d34e4229509',
-            {
-                method: 'PUT',
+        try {
+            const response = await fetch(`https://back-end-proyecto-final-production.up.railway.app/api/workspaces/${workspaceId}`, {
+                method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, "$1")}`
                 },
-                body: JSON.stringify(updatedChannels)
-            }
-        )
+                credentials: 'include', 
+            });
 
-        const resultCanal = await responseChannel.json()
-        setChannels((prevChannels) => [...prevChannels, resultCanal])
-        setIsMenuOpen(prevState => !prevState)
-        navigate(`/workspace/${workspaceId}/${nuevoCanal.id}`)
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status} ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            const workspace = data
+
+            console.log(workspace); 
+            setWorkSpace(workspace);
+
+        } catch (error) {
+            console.error('Error fetching workspace:', error);
+        }
+
     }
 
-    /**
-     * Navigates to the page for creating a new workspace.
-     *
-     * @return {void} This function does not return anything.
-     */
+    
+    const fetchChannels = async (workspaceId) => {
+        try {
+            const response = await fetch(`https://back-end-proyecto-final-production.up.railway.app/api/channels/workspace/${workspaceId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, "$1")}`
+                },
+                credentials: 'include', 
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status} ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            const channels = data
+
+           
+            setChannels(channels);
+
+        } catch (error) {
+            console.error('Error fetching channels:', error);
+        }
+    };
+   
+    const fetchMessages = async (channelId) => {
+        
+        try {
+            const response = await fetch(`https://back-end-proyecto-final-production.up.railway.app/api/channel/${channelId}`, {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, "$1")}`
+                    
+                },
+               
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status} ${response.statusText}`);
+            }
+
+            const messages = await response.json();
+            
+            setMessages(messages);
+        } catch (error) {
+            console.error('Error fetching messages:', error);
+            
+        }
+    };
+
+
+    const fetchUserById = async (userId) => {
+        try {
+            const response = await fetch(`https://back-end-proyecto-final-production.up.railway.app/api/users/${userId}`, {
+                method: 'GET',
+                credentials: 'include', 
+            });
+            if (!response.ok) {
+                throw new Error('Error fetching user data');
+            }
+            const user = await response.json();
+            setUser(user);
+            return user; 
+        } catch (error) {
+            console.error('Error fetching user:', error);
+            return null;
+        }
+    };
+
+
+/*
+const handleSubmitMessage = async (e, canal_id) => {
+    e.preventDefault();
+    console.log('Canal ID:', canal_id)
+    const formulario = e.target;
+    const datosFormulario = new FormData(formulario);
+    const nuevoMensaje = {
+        channel_id: Number(canal_id),
+        content: datosFormulario.get('contenido'),
+    };
+
+    try {
+        
+        const response = await fetch('https://back-end-proyecto-final-production.up.railway.app/api/messages', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, "$1")}`,
+            },
+            body: JSON.stringify(nuevoMensaje),
+        });
+
+        if (!response.ok) {
+            const errorMessage = await response.text();
+            throw new Error(`Error en el POST: ${response.status} - ${errorMessage}`);
+        }
+
+        const savedMessage = await response.json();
+
+     
+        const updatedMessagesResponse = await fetch(`https://back-end-proyecto-final-production.up.railway.app/api/messages?channelId=${canal_id}`, {
+            headers: {
+                Authorization: `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, "$1")}`,
+            },
+            credentials: 'include',
+        });
+
+        if (!updatedMessagesResponse.ok) {
+            const errorMessage = await updatedMessagesResponse.text();
+            throw new Error(`Error al obtener mensajes actualizados: ${updatedMessagesResponse.status} - ${errorMessage}`);
+        }
+
+        const updatedMessages = await updatedMessagesResponse.json();
+        setMessages(updatedMessages.filter(message => message.channelId === canal_id))
+     
+
+        formulario.reset();
+    } catch (error) {
+        console.error('Error al enviar el mensaje:', error);
+    }
+};
+*/
+const handleSubmitMessage = async (e, canal_id) => {
+    e.preventDefault();
+
+    const formulario = e.target;
+    const datosFormulario = new FormData(formulario);
+    const contenido = datosFormulario.get('contenido');
+
+    if (!contenido || !canal_id) {
+        console.error('Contenido o canal ID faltantes');
+        return;
+    }
+
+    const nuevoMensaje = {
+        channel_id: Number(canal_id),
+        content: contenido,
+    };
+
+    try {
+        // Enviar el nuevo mensaje al backend
+        const response = await fetch('https://back-end-proyecto-final-production.up.railway.app/api/messages', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, "$1")}`,
+            },
+            body: JSON.stringify(nuevoMensaje),
+        });
+
+        if (!response.ok) {
+            const errorMessage = await response.text();
+            throw new Error(`Error en el POST: ${response.status} - ${errorMessage}`);
+        }
+
+        const savedMessage = await response.json();
+
+        // Actualizar los mensajes del canal correspondiente
+        const updatedMessagesResponse = await fetch(`https://back-end-proyecto-final-production.up.railway.app/api/messages?channelId=${canal_id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, "$1")}`,
+            },
+            credentials: 'include',
+        });
+
+        if (!updatedMessagesResponse.ok) {
+            const errorMessage = await updatedMessagesResponse.text();
+            throw new Error(`Error al obtener mensajes actualizados: ${updatedMessagesResponse.status} - ${errorMessage}`);
+        }
+
+        const updatedMessages = await updatedMessagesResponse.json();
+
+        // Filtrar mensajes por canal y actualizar el estado global
+        setMessages(updatedMessages.filter(message => message.channel_id === Number(canal_id)));
+
+        // Resetear el formulario después del envío exitoso
+        formulario.reset();
+
+        console.log('Mensaje enviado y mensajes actualizados correctamente');
+    } catch (error) {
+        console.error('Error al enviar el mensaje:', error);
+    }
+};
+
+
+
+    
+    const handleSubmitNews = async (e) => {
+        e.preventDefault();
+    
+        const formulario = e.target;
+        const datosFormularios = new FormData(formulario);
+    
+        
+        const nuevoWorkSpace = {
+            name: datosFormularios.get('nombreNuevoWs'), 
+        };
+    
+        try {
+            
+            const responseWorkspace = await fetch('https://back-end-proyecto-final-production.up.railway.app/api/workspaces', { 
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(nuevoWorkSpace),
+            });
+    
+            if (!responseWorkspace.ok) {
+                const errorMessage = await responseWorkspace.text();
+                throw new Error(`Error creando workspace: ${responseWorkspace.status} - ${errorMessage}`);
+            }
+    
+            const createdWorkspace = await responseWorkspace.json();
+    
+           
+            const nuevoCanal = {
+                workspace_id: createdWorkspace.id, 
+                name: datosFormularios.get('nombreCanal'),
+            };
+    
+            const responseChannel = await fetch('https://back-end-proyecto-final-production.up.railway.app/api/channels', { // Cambiar URL en producción
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(nuevoCanal),
+            });
+    
+            if (!responseChannel.ok) {
+                const errorMessage = await responseChannel.text();
+                throw new Error(`Error creando canal: ${responseChannel.status} - ${errorMessage}`);
+            }
+    
+            const createdChannel = await responseChannel.json();
+    
+       
+            setWorkSpaces((prev) => [...prev, createdWorkspace]);
+            setChannels((prev) => [...prev, createdChannel]);
+    
+        
+            formulario.reset();
+            navigate(`/home`);
+        } catch (error) {
+            console.error('Error al crear workspace o canal:', error);
+        }
+    };
+    
+
+   
+    const handleSubmitNewChannel = async (e, workspaceId) => {
+        e.preventDefault();
+    
+        const formulario = e.target;
+        const datosFormulario = new FormData(formulario);
+    
+       
+        const nuevoCanal = {
+            workspace_id: workspaceId, 
+            name: datosFormulario.get('nombreCanal'),
+        };
+    
+        try {
+           
+            const response = await fetch('https://back-end-proyecto-final-production.up.railway.app/api/channels', { 
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(nuevoCanal),
+            });
+    
+            if (!response.ok) {
+                const errorMessage = await response.text();
+                throw new Error(`Error creando canal: ${response.status} - ${errorMessage}`);
+            }
+    
+            const createdChannel = await response.json();
+    
+           
+            setChannels((prevChannels) => [...prevChannels, createdChannel]);
+    
+           
+            setIsMenuOpen((prevState) => !prevState);
+            navigate(`/workspace/${workspaceId}/${createdChannel.id}`);
+    
+        } catch (error) {
+            console.error('Error al crear el canal:', error);
+        }
+    };
+    const handleNavigateHome = () => {
+        navigate('/home')
+    }
+
+    const handleNavigateLogin = () => {
+        navigate('/')
+    }
+    const handleLogout = async () => {
+        try {
+            const response = await fetch('https://back-end-proyecto-final-production.up.railway.app/api/logout', {
+                method: 'GET', 
+                credentials: 'include', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            if (!response.ok) {
+                throw new Error(`Error en el cierre de sesión: ${response.statusText}`);
+            }
+    
+            
+            localStorage.removeItem('userId');
+    
+           
+           handleNavigateLogin() 
+        } catch (error) {
+            console.error('Error al cerrar sesión:', error);
+        }
+    };
+
+
+    
     const handleNavigateNws = () => {
         navigate('/workspace/new')
     }
 
-    /**
-     * Navigates the user to the home page.
-     *
-     * This function does not take any parameters and does not return anything.
-     */
-    const handleNavigateHome = () => {
-        navigate('/')
-    }
+    
+    
 
 
-    /**
-     * Toggles the state of the sidebar menu to open or close.
-     *
-     * This function does not take any parameters and does not return anything.
-     */
     const toggleMenu = () => {
         setIsMenuOpen(prevState => !prevState);
     }
 
 
-    /**
-     * Toggles the state of the menu to open or close.
-     *
-     * This function does not take any parameters and does not return anything.
-     */
+    
     const toggleMenuT = () => {
         setIsOpen(!isOpen);
     }
@@ -242,7 +446,13 @@ export const GlobalContextProvider = ({ children }) => {
                 toggleMenu: toggleMenu,
                 toggleMenuT: toggleMenuT,
                 setIsOpen: setIsOpen,
-                isOpen: isOpen
+                isOpen: isOpen,
+                fetchUserById: fetchUserById,
+                isUserInfoVisible: isUserInfoVisible,
+                setIsUserInfoVisible: setIsUserInfoVisible,
+                user: user,
+                handleLogout: handleLogout,
+                handleNavigateLogin: handleNavigateLogin
 
 
             }
