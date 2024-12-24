@@ -147,59 +147,7 @@ export const GlobalContextProvider = ({ children }) => {
     };
 
 
-/*
-const handleSubmitMessage = async (e, canal_id) => {
-    e.preventDefault();
-    console.log('Canal ID:', canal_id)
-    const formulario = e.target;
-    const datosFormulario = new FormData(formulario);
-    const nuevoMensaje = {
-        channel_id: Number(canal_id),
-        content: datosFormulario.get('contenido'),
-    };
 
-    try {
-        
-        const response = await fetch('https://back-end-proyecto-final-production.up.railway.app/api/messages', {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, "$1")}`,
-            },
-            body: JSON.stringify(nuevoMensaje),
-        });
-
-        if (!response.ok) {
-            const errorMessage = await response.text();
-            throw new Error(`Error en el POST: ${response.status} - ${errorMessage}`);
-        }
-
-        const savedMessage = await response.json();
-
-     
-        const updatedMessagesResponse = await fetch(`https://back-end-proyecto-final-production.up.railway.app/api/messages?channelId=${canal_id}`, {
-            headers: {
-                Authorization: `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, "$1")}`,
-            },
-            credentials: 'include',
-        });
-
-        if (!updatedMessagesResponse.ok) {
-            const errorMessage = await updatedMessagesResponse.text();
-            throw new Error(`Error al obtener mensajes actualizados: ${updatedMessagesResponse.status} - ${errorMessage}`);
-        }
-
-        const updatedMessages = await updatedMessagesResponse.json();
-        setMessages(updatedMessages.filter(message => message.channelId === canal_id))
-     
-
-        formulario.reset();
-    } catch (error) {
-        console.error('Error al enviar el mensaje:', error);
-    }
-};
-*/
 const handleSubmitMessage = async (e, canal_id) => {
     e.preventDefault();
 
@@ -218,7 +166,7 @@ const handleSubmitMessage = async (e, canal_id) => {
     };
 
     try {
-        // Enviar el nuevo mensaje al backend
+      
         const response = await fetch('https://back-end-proyecto-final-production.up.railway.app/api/messages', {
             method: 'POST',
             credentials: 'include',
@@ -236,7 +184,7 @@ const handleSubmitMessage = async (e, canal_id) => {
 
         const savedMessage = await response.json();
 
-        // Actualizar los mensajes del canal correspondiente
+      
         const updatedMessagesResponse = await fetch(`https://back-end-proyecto-final-production.up.railway.app/api/messages?channelId=${canal_id}`, {
             method: 'GET',
             headers: {
@@ -253,10 +201,10 @@ const handleSubmitMessage = async (e, canal_id) => {
 
         const updatedMessages = await updatedMessagesResponse.json();
 
-        // Filtrar mensajes por canal y actualizar el estado global
+    
         setMessages(updatedMessages.filter(message => message.channel_id === Number(canal_id)));
 
-        // Resetear el formulario después del envío exitoso
+   
         formulario.reset();
 
         console.log('Mensaje enviado y mensajes actualizados correctamente');
@@ -465,11 +413,7 @@ const handleSubmitMessage = async (e, canal_id) => {
     )
 }
 
-/**
- * Retrieves the global context object from the Context API.
- *
- * @return {object} The global context object.
- */
+
 export const useGlobalContext = () => {
     return useContext(GlobalContext)
 }
